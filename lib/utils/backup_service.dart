@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:campusbite/services/hive_service.dart';
-import 'package:path_provider/path_provider.dart';
+// Removed path_provider dependency; using system temp directory instead.
 import 'package:share_plus/share_plus.dart';
 import 'dart:io';
 
@@ -10,9 +10,9 @@ class BackupService {
   static Future<void> backupData() async {
     final hiveService = HiveService();
     
-    final directory = await getTemporaryDirectory();
+    final directory = Directory.systemTemp;
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final path = '${directory.path}/campusbite_backup_$timestamp.json';
+    final path = '${directory.path}${Platform.pathSeparator}campusbite_backup_$timestamp.json';
     
     final data = await hiveService.exportData();
     final file = File(path);

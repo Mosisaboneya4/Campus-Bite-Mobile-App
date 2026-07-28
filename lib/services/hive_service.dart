@@ -3,7 +3,7 @@ import 'package:campusbite/models/meal.dart';
 import 'package:campusbite/models/contract.dart';
 import 'package:campusbite/models/settings.dart';
 import 'package:campusbite/constants/app_constants.dart';
-import 'package:path_provider/path_provider.dart';
+// Removed path_provider to avoid jni transitive dependency in CI.
 
 /// Hive database service for local storage
 class HiveService {
@@ -17,11 +17,8 @@ class HiveService {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    // Get application documents directory
-    final directory = await getApplicationDocumentsDirectory();
-    
     // Initialize Hive
-    await Hive.initFlutter(directory.path);
+    await Hive.initFlutter();
 
     // Register adapters
     Hive.registerAdapter(MealAdapter());

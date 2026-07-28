@@ -2,7 +2,7 @@ import 'package:campusbite/providers/contract_provider.dart';
 import 'package:campusbite/models/contract.dart';
 import 'package:campusbite/utils/formatters.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:path_provider/path_provider.dart';
+// Removed path_provider usage; using system temp directory instead.
 import 'package:share_plus/share_plus.dart';
 import 'dart:io';
 
@@ -32,8 +32,8 @@ class ExportService {
 
     String csv = rows.map((row) => row.join(',')).join('\n');
 
-    final directory = await getTemporaryDirectory();
-    final path = '${directory.path}/meal_history.csv';
+    final directory = Directory.systemTemp;
+    final path = '${directory.path}${Platform.pathSeparator}meal_history.csv';
     final file = File(path);
     await file.writeAsString(csv);
 
@@ -101,8 +101,8 @@ class ExportService {
       ),
     );
 
-    final directory = await getTemporaryDirectory();
-    final path = '${directory.path}/meal_history.pdf';
+    final directory = Directory.systemTemp;
+    final path = '${directory.path}${Platform.pathSeparator}meal_history.pdf';
     final file = File(path);
     await file.writeAsBytes(await pdf.save());
 

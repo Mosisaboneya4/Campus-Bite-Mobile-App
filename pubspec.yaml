@@ -28,7 +28,7 @@ dependencies:
   pdf: ^3.10.7
   csv: ^8.0.0
   share_plus: ^13.3.0
-  path_provider: ^2.1.1
+  # path_provider removed for CI compatibility
   
   # UI Components
   cupertino_icons: ^1.0.6
