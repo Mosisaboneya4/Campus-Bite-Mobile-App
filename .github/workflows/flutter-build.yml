@@ -1,0 +1,68 @@
+name: Flutter CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  analyze:
+    name: Analyze & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run analyzer
+        run: flutter analyze
+      - name: Run tests
+        run: flutter test --no-pub
+
+  android-build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    needs: analyze
+    steps:
+      - uses: actions/checkout@v5
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build Android APK
+        run: flutter build apk --release
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: campusbite-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+# Optional iOS build job. Requires macOS runner and valid signing setup for full App Store / IPA workflow.
+# Remove or comment out if you don't plan to build on macOS.
+  ios-build:
+    name: Build iOS
+    runs-on: macos-latest
+    needs: analyze
+    if: github.event_name != 'pull_request'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build iOS archive
+        run: flutter build ipa --no-pub --release
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: campusbite-ipa
+          path: build/ios/ipa/*.ipa
