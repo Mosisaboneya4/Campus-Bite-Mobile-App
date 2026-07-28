@@ -45,24 +45,4 @@ jobs:
           name: campusbite-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
-# Optional iOS build job. Requires macOS runner and valid signing setup for full App Store / IPA workflow.
-# Remove or comment out if you don't plan to build on macOS.
-  ios-build:
-    name: Build iOS
-    runs-on: macos-latest
-    needs: analyze
-    if: github.event_name != 'pull_request'
-    steps:
-      - uses: actions/checkout@v5
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.44.6'
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Build iOS archive
-        run: flutter build ipa --no-pub --release
-      - name: Upload IPA artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: campusbite-ipa
-          path: build/ios/ipa/*.ipa
+# iOS build job removed to avoid macOS runner requirements and CI blocking.
